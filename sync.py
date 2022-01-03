@@ -55,6 +55,17 @@ def main():
 	sync(**opts.__dict__)
 
 
+def completeSync():
+	print("Fit file uploaded to Garmin Connect")
+
+	date = int(datetime.now().timestamp())
+	f = open("date.txt", "w")
+	f.write(str(date))
+	f.close()
+
+	print("Update timestamp successfully")
+
+
 def sync(garmin_username, garmin_password, fromdate, todate, no_upload, verbose):
 	def verbose_print(s):
 		if verbose:
@@ -119,7 +130,7 @@ def sync(garmin_username, garmin_password, fromdate, todate, no_upload, verbose)
 	verbose_print('attempting to upload fit file...\n')
 	r = garmin.upload_file(fit.getvalue(), session)
 	if r:
-		print("Fit file uploaded to Garmin Connect")
+		completeSync()
 
 
 if __name__ == '__main__':

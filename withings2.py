@@ -158,13 +158,13 @@ class WithingsAccount(Withings):
 
 	def getMeasurements(self, startdate, enddate):
 		print("Withings: Get Measurements")
-
+		file = open("date.txt", "r")
+		date = file.read()
 		params = {
 			"access_token" : self.withings.user_config['access_token'],
 			# "meastype" : Withings.MEASTYPE_WEIGHT,
 			"category" : 1,
-			"startdate" : startdate,
-			"enddate" : enddate,
+			"lastupdate": date,
 		}
 
 		req = requests.post(Withings.GETMEAS_URL, params )
@@ -172,9 +172,9 @@ class WithingsAccount(Withings):
 		measurements = req.json()
 
 		if measurements.get('status') == 0:
-			print("   Measurements received")
-
-			return [WithingsMeasureGroup(g) for g in measurements.get('body').get('measuregrps')]
+			measures = [WithingsMeasureGroup(g) for g in measurements.get('body').get('measuregrps')]
+			print(f"{len(measures)} measurements received")
+			return measures
 
 class WithingsMeasureGroup(object):
     def __init__(self, measuregrp):
